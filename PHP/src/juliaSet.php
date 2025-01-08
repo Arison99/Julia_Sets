@@ -7,11 +7,12 @@ $cRe = -0.7;
 $cIm = 0.27015;
 
 // Create an image
-$image = imagecreatetruecolor($width, $height);
+$image = new Imagick();
+$image->newImage($width, $height, new ImagickPixel('black'));
+$image->setImageFormat('png');
 
-// Colors
-$black = imagecolorallocate($image, 0, 0, 0);
-$white = imagecolorallocate($image, 255, 255, 255);
+// Create a drawing object
+$draw = new ImagickDraw();
 
 // Draw the Julia set
 for ($x = 0; $x < $width; $x++) {
@@ -25,15 +26,23 @@ for ($x = 0; $x < $width; $x++) {
             $zx = $tmp;
             $i--;
         }
-        $color = $i == 0 ? $black : imagecolorallocate($image, $i % 256, $i % 256, $i % 256);
-        imagesetpixel($image, $x, $y, $color);
+        $colorValue = $i == 0 ? 0 : (255 * $i / $maxIterations);
+        $color = new ImagickPixel("rgb($colorValue, $colorValue, $colorValue)");
+        $draw->setFillColor($color);
+        $draw->point($x, $y);
     }
 }
 
+// Draw the points on the image
+$image->drawImage($draw);
+
 // Save the image to a file
 $imagePath = 'juliaSet.png';
-imagepng($image, $imagePath);
-imagedestroy($image);
+$image->writeImage($imagePath);
+
+// Clean up
+$image->clear();
+$image->destroy();
 
 // Output the image path
 echo $imagePath;

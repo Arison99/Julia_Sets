@@ -1,0 +1,17 @@
+{
+    "name": "user/php",
+    "autoload": {
+        "psr-4": {
+            "User\\Php\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Arison99",
+            "email": "harrisondaviinci@gmail.com"
+        }
+    ],
+    "require": {
+         "ext-imagick": "*"
+    }
+}
